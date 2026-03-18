@@ -1,0 +1,21 @@
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Initialise the project (creates pyproject.toml + uv.lock)
+cd research_pipeline
+uv init --no-readme
+
+# Add all dependencies (replaces requirements.txt)
+uv add google-adk
+uv add google-cloud-bigquery google-cloud-storage google-cloud-aiplatform google-auth
+uv add pydantic-settings
+uv add fastapi "uvicorn[standard]"
+uv add aiosqlite asyncpg
+uv add opentelemetry-sdk opentelemetry-exporter-gcp-trace
+
+# Dev/test dependencies go in a separate group
+uv add --dev pytest pytest-asyncio
+
+# Run anything inside the managed venv
+uv run python main.py --brief "..."
+uv run pytest tests/ -v
